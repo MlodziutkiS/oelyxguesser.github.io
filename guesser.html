@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Style ikony darktheme ale zrobione fontem -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+
     <link
         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
@@ -26,11 +31,15 @@
         <a href="./guesser.html"><button class="przycisk">Przeglądaj gruzy</button></a>
         <a href="./kontakt.html"><button class="przycisk">Info</button></a>
         <a href="./filmiki.html"><button class="przycisk">Kinematografia upalania</button></a>
+        <a onclick="mode()" >
+        <button class="material-symbols-outlined przycisk" style="width: 2em;" >contrast</button>
+        </a>
     </div>
 
     <div id="wybor" class="wybor">
         <h1>wybierz tryb:</h1>
-        <button class="przycisk2" onclick="show_normal()">normalny</button><br>
+        <button class="przycisk2" onclick="show_normal()">normalny</button>
+        <button class="przycisk2" onclick="show_streak()" id="streakbutton">streak 1x🔥</button><br>
     </div>
 
     <div class="main" id="normalny" style="display:none">
@@ -119,7 +128,6 @@
         </div>
 
         <script>
-
             /*
             function reset() {
                 for(let y = 0; y < 9; y++){
@@ -129,11 +137,51 @@
             */
 
             function show_normal() {
+                document.getElementsByClassName("przycisk2").item(2).setAttribute("onclick","klik()");
+                let score = document.getElementById("score");
+                score.style.display = "none";
                 let normal = document.getElementById("normalny");
                 if (normal.style.display == "none") {
                     normal.style.display = "block";
                 } else {
                     normal.style.display = "none";
+                }
+            }
+            let prev=null;
+            function show_streak() {
+                document.getElementsByClassName("przycisk2").item(2).setAttribute("onclick","klik2()");
+                let score = document.getElementById("score");
+                score.style.display = "none";
+                let normal = document.getElementById("normalny");
+                if (normal.style.display == "none") {
+                    normal.style.display = "block";
+                } else {
+                    normal.style.display = "none";
+                }
+                if(prev==null){
+                    const prev = new Date();
+                    let prevTimer = prev.getTime();
+                    console.log(prevTimer);
+                    document.getElementById("time").innerText=prevTimer;
+                }
+                
+            }
+            function show_points() {
+                let normal = document.getElementById("normalny");
+                let score = document.getElementById("score");
+                let time = document.getElementById("time");
+                let ranking=document.getElementById("ranking");
+                if (score.style.display == "block") {
+                    normal.style.display = "block";
+                    score.style.display = "none";
+                    time.style.display = "none";
+                    ranking.style.display="none"
+
+                } else {
+                    normal.style.display = "none";
+                    score.style.display = "block";
+                    time.style.display = "block";
+                    ranking.style.display="block"
                 }
             }
 
@@ -147,7 +195,7 @@
             function currentSlide(n) {
                 showSlides(slideIndex = n);
             }
-
+            
             function showSlides(n) {
                 let i;
                 let slides = document.getElementsByClassName("mySlides");
@@ -442,7 +490,63 @@
             loadRandomImage();
             let ceny=[4800,3900,9600,5900,4500,1999,8999,4999,5800,5400,9500,2100,7000,9999,10000,2000,3600,2200,8200,2750];
             let marginesbledu = 1000;
+            let mnoznik=1;
+            let punkty=0;
+            let prob=0;
 
+            function klik2() {
+                prob++;
+                if(prob==5){
+                    const now= new Date();
+                    let nowTimer = now.getTime();
+                    console.log(nowTimer);
+                    mnoznik=1;
+                    prob=0;
+                    document.getElementById("score").innerHTML="Twoj wynik to "+punkty+"/5";
+                    let prevtime=document.getElementById("time").innerHTML;
+                    document.getElementById("time").innerHTML="W czasie "+((Number(nowTimer)-Number(prevtime))/1000)+" sekund";
+                    punkty=0;
+                    show_points();
+                    let userID=prompt("Podaj nazwe do rankingu:","")
+                    prev=null;
+                    return;
+                }
+                let strzal = document.getElementById("cena").value;
+
+                    if (strzal == ceny[randomNumber-1]) {
+                        document.getElementById('wiadomosc').innerHTML = "to żeś pan trafił w 10, zabieraj tego szrota";
+                        document.getElementById("cena").value=null;
+                        
+                        punkty=punkty+mnoznik;
+                        mnoznik++;
+                    }
+                    else if (strzal >= (ceny[randomNumber-1] - marginesbledu) && strzal <= (ceny[randomNumber-1] + marginesbledu)) {
+                        if (strzal > ceny[randomNumber-1]) {
+                            document.getElementById('wiadomosc').innerHTML = "zabieraj pan, przestrzeliłeś o " + (strzal - ceny[randomNumber-1]) + "zł";
+                        }
+                        else {
+                            document.getElementById('wiadomosc').innerHTML = "troche mało, ale zabieraj pan, niech strace te " + (ceny[randomNumber-1] - strzal) + "zł";
+                        }
+                        document.getElementById("cena").value=null;
+                        
+                        punkty=punkty+mnoznik;
+                        mnoznik++;
+                    }
+                    else {
+                        if (strzal > ceny[randomNumber-1]) {
+                            document.getElementById('wiadomosc').innerHTML = "dałeś się wydymać dla handlarzyka, przestrzeliłeś o " + (strzal - ceny[randomNumber-1]) + "zł";
+                            mnoznik=1;
+                        }
+                        else {
+                            document.getElementById('wiadomosc').innerHTML = "po co pan mój czas marnujesz jak pieniędzy nie masz? brakuje ci: " + (ceny[randomNumber-1] - strzal) + "zł";
+                            mnoznik=1;
+                        }
+                        
+                    }
+                    document.getElementById("streakbutton").innerHTML="streak "+mnoznik+"x🔥";
+                    
+                    loadRandomImage();
+            }
             function klik() {
                 let strzal = document.getElementById("cena").value;
 
@@ -467,13 +571,59 @@
                         }
                     }
             }
-            
         </script>
         <div class="stopka">
             <hr>
-            Project by: dynamo & roger | wersja 1.2
+            Project by: dynamo & roger & mlodziutki| wersja 1.4i
         </div>
-
+    </div>
+    <h1 id="score" style="display: none; text-align: center;font-size: 4em;">Placeholder wyniku</h1>
+    <h1 id="time" style="display: none; text-align: center;font-size: 4em;">Placeholder czasu</h1>
+    <h6 id="ranking" style="display: none; text-align: center;font-size: 4em;margin: 2em;padding:0.5em">
+        <ol>
+        <li>Placeholder rankingu /czas /punkty</li>
+        <li>Placeholder rankingu /czas /punkty</li>
+        <li>Placeholder rankingu /czas /punkty</li>
+        <li>Placeholder rankingu /czas /punkty</li>
+        <li>Placeholder rankingu /czas /punkty</li>
+        </ol>
+    </h6>
 </body>
+<script>
+    function mode(){
+document.body.classList.toggle("dark-body");
+
+let elementzgad=document.getElementsByClassName("zgadywanka").item(0);
+elementzgad.classList.toggle("dark-zgadywanka");
+
+let elementwyb=document.getElementById("wybor");
+elementwyb.classList.toggle("dark-wybor");
+
+let elementopis=document.getElementById("opistekst");
+elementopis.classList.toggle("dark-opis");
+
+let elementslide=document.getElementsByClassName("slideshow-container").item(0);
+elementslide.classList.toggle("dark-slide");
+
+let elementstopka=document.getElementsByClassName("stopka").item(0);
+elementstopka.classList.toggle("dark-stopka");
+
+let elementscore=document.getElementById("score");
+elementscore.classList.toggle("dark-score");
+
+let elementtime=document.getElementById("time");
+elementtime.classList.toggle("dark-score");
+
+let elementranking=document.getElementById("ranking");
+elementranking.classList.toggle("dark-score");
+
+if(document.getElementById("specs").style.filter=='invert(90%)'){
+    document.getElementById("specs").style.filter="invert(0%)";
+}else{
+document.getElementById("specs").style.filter="invert(90%)";
+}
+}
+mode();
+</script>
 
 </html>

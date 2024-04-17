@@ -274,3 +274,34 @@ position:absolute;
   min-width: 250%;
   object-fit: fill;
 }
+.dark-body {
+  background-color: #333;
+}
+.dark-zgadywanka {
+  color:#aaa;
+  background-color: #444;
+}
+.dark-wybor {
+  color:#aaa;
+  background-color: #222;
+}
+.dark-opis {
+  color:#aaa;
+  background-color: #222;
+}
+.dark-slide{
+  color:#aaa;
+  background-color: #222;
+}
+.dark-stopka{
+  color:#ffa;
+}
+.dark-score{
+  color:#717171;
+  background-color: #222;
+  font-size: 4em;
+}
+.dark-menu{
+  color:#aaa;
+  background-color: #222;
+}

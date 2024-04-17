@@ -9,13 +9,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-</head>
+    <!-- Style ikony darktheme ale zrobione fontem -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  </head>
 <body>
     <div class="banner">
       <a href="./index.html"><img src="img/oelyx.png"><img src="img/guesser.png" width="300px"></a>
       <a href="./guesser.html"><button class="przycisk">Przeglądaj gruzy</button></a>
       <a href="./kontakt.html"><button class="przycisk">Info</button></a>
       <a href="./filmiki.html"><button class="przycisk">Kinematografia upalania</button></a>
+      <a onclick="mode()" >
+        <button class="material-symbols-outlined przycisk" style="width: 2em;" >contrast</button>
+        </a>
     </div>
     <div class="menu">
     
@@ -64,8 +69,17 @@
     </div> 
     <div class="stopka">
       <hr>
-      Project by: dynamo & roger | wersja 1.2
+      Project by: dynamo & roger & mlodziutki| wersja 1.4i
     </div>
     
 </body>
+<script>
+function mode(){
+document.body.classList.toggle("dark-body");
+
+let elementstopka=document.getElementsByClassName("stopka").item(0);
+elementstopka.classList.toggle("dark-stopka");
+}
+mode();
+</script>
 </html>
